@@ -1,0 +1,10 @@
+{
+  "name": "kaia-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "build-go": "go build -o kaia-backend main.go",
+    "start-go": "go run main.go",
+    "run-go": "go run main.go",
+    "dev": "npm run run-go"
+  }
+}
