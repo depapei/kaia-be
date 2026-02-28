@@ -15,7 +15,6 @@ type Product struct {
 	Description   string         `gorm:"column:description" json:"description"`
 	Longdesc      string         `gorm:"column:longdesc" json:"longdesc"`
 	Image         string         `gorm:"column:image" json:"image"`
-	Sliceoptions  string         `gorm:"column:sliceoptions" json:"sliceoptions"`
 	CreatedBy     string         `gorm:"column:created_by;not null" json:"created_by"`
 	Admin         Admin          `gorm:"foreignKey:created_by" json:"admin"`
 	ProductSlices []Productslice `gorm:"foreignKey:product_id" json:"product_slices"`
