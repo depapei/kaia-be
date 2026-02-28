@@ -15,15 +15,20 @@ type ItemsInput struct {
 	ID       string  `json:"id" binding:"required"`
 	Quantity int64   `json:"quantity" binding:"required"`
 	Price    float64 `json:"price" binding:"required"`
+	Name     string  `json:"name" binding:"required"`
+	Slices   string  `json:"slices" binding:"required"`
 }
 
 type TransactionInput struct {
+	ID            string       `json:"id,omitempty"`
+	CreatedAt     string       `json:"createdAt,omitempty"`
 	UserID        string       `json:"userId,omitempty"`
 	PostalCode    string       `json:"postalCode" binding:"required"`
 	Address       string       `json:"address" binding:"required"`
 	City          string       `json:"city" binding:"required"`
 	CustomerEmail string       `json:"customerEmail" binding:"required"`
 	CustomerName  string       `json:"customerName" binding:"required"`
+	TotalPrice    float64      `json:"totalPrice" binding:"required"`
 	Items         []ItemsInput `json:"items" binding:"required"`
 }
 
@@ -104,6 +109,9 @@ func Create(c *gin.Context) {
 		})
 		return
 	}
+
+	// final, set transaction id
+	input.ID = trx_h.ID
 
 	c.JSON(http.StatusCreated, res.Success{
 		Success: true,
