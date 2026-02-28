@@ -54,9 +54,10 @@ func GenerateModels() {
 
 	// detail_transaction := g.GenerateModel("detail_transaction",
 	// 	gen.FieldRelate(field.HasOne, "ProductSlice", productslices, &field.RelateConfig{
-	// 		GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"productslice_id"}},
 	// 	}),
 	// )
+
 	// transaction := g.GenerateModelAs("transactions", "HeaderTransaction",
 	// 	gen.FieldRelate(field.HasMany, "DetailTransaction", detail_transaction, &field.RelateConfig{
 	// 		GORMTag: field.GormTag{"foreignKey": []string{"transaction_id"}},
