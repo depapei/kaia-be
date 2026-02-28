@@ -12,7 +12,7 @@ type DetailTransaction struct {
 	TransactionID  string       `gorm:"column:transaction_id;not null" json:"transaction_id"`
 	ProductsliceID string       `gorm:"column:productslice_id;not null" json:"productslice_id"`
 	Quantity       float64      `gorm:"column:quantity;not null" json:"quantity"`
-	ProductSlice   Productslice `gorm:"foreignKey:product_id" json:"product_slice"`
+	ProductSlice   Productslice `gorm:"foreignKey:productslice_id" json:"product_slice"`
 }
 
 // TableName DetailTransaction's table name

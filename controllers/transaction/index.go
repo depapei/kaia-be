@@ -13,7 +13,10 @@ func Index(c *gin.Context) {
 
 	var transactions []model.HeaderTransaction
 
-	result := DataAccess.DB.Preload("DetailTransaction.ProductSlice.Product").Find(&transactions).Limit(50)
+	da := DataAccess.DB.Model(&model.HeaderTransaction{})
+	result := da.Preload("DetailTransaction.ProductSlice.Product").
+		Limit(200).
+		Find(&transactions)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, res.Fail{
@@ -37,7 +40,6 @@ func Index(c *gin.Context) {
 
 		trx_res = append(trx_res, TransactionInput{
 			ID:            transaction.ID,
-			UserID:        transaction.CreatedBy.String(),
 			PostalCode:    transaction.Postalcode,
 			Address:       transaction.Address,
 			City:          transaction.City,
@@ -45,6 +47,7 @@ func Index(c *gin.Context) {
 			CustomerName:  transaction.Customername,
 			TotalPrice:    float64(transaction.Totalprice),
 			Items:         trx_items,
+			CreatedAt:     transaction.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 
