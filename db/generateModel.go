@@ -6,7 +6,6 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gen"
-	"gorm.io/gen/field"
 	"gorm.io/gorm"
 )
 
@@ -33,42 +32,49 @@ func GenerateModels() {
 
 	admins := g.GenerateModel("admins")
 
-	products := g.GenerateModel("products",
-		gen.FieldRelate(field.HasOne, "Admin", admins, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"created_by"}},
-		}),
-	)
+	// productslices := g.GenerateModel("productslice")
 
-	wishlists := g.GenerateModel("wishlist",
-		gen.FieldRelate(field.HasOne, "Product", products, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
-		}),
-		gen.FieldRelate(field.HasOne, "User", users, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"user_id"}},
-		}),
-	)
+	// products := g.GenerateModel("products",
+	// 	gen.FieldRelate(field.HasOne, "Admin", admins, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"created_by"}},
+	// 	}),
+	// 	gen.FieldRelate(field.HasMany, "ProductSlices", productslices, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
+	// 	}),
+	// )
 
-	productslices := g.GenerateModel("productslice",
-		gen.FieldRelate(field.HasOne, "Product", products, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
-		}),
-	)
+	// wishlists := g.GenerateModel("wishlist",
+	// 	gen.FieldRelate(field.HasOne, "Product", products, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
+	// 	}),
+	// 	gen.FieldRelate(field.HasOne, "User", users, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"user_id"}},
+	// 	}),
+	// )
 
-	detail_transaction := g.GenerateModel("detail_transaction",
-		gen.FieldRelate(field.HasOne, "ProductSlice", productslices, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
-		}),
-	)
-	transaction := g.GenerateModelAs("transactions", "HeaderTransaction",
-		gen.FieldRelate(field.HasMany, "DetailTransaction", detail_transaction, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"transaction_id"}},
-		}),
-		gen.FieldRelate(field.HasOne, "Customer", users, &field.RelateConfig{
-			GORMTag: field.GormTag{"foreignKey": []string{"created_by"}},
-		}),
-	)
+	// detail_transaction := g.GenerateModel("detail_transaction",
+	// 	gen.FieldRelate(field.HasOne, "ProductSlice", productslices, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"product_id"}},
+	// 	}),
+	// )
+	// transaction := g.GenerateModelAs("transactions", "HeaderTransaction",
+	// 	gen.FieldRelate(field.HasMany, "DetailTransaction", detail_transaction, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"transaction_id"}},
+	// 	}),
+	// 	gen.FieldRelate(field.HasOne, "Customer", users, &field.RelateConfig{
+	// 		GORMTag: field.GormTag{"foreignKey": []string{"created_by"}},
+	// 	}),
+	// )
 
-	g.ApplyBasic(users, admins, products, wishlists, productslices, detail_transaction, transaction)
+	g.ApplyBasic(
+		users,
+		admins,
+		// products,
+		// wishlists,
+		// productslices,
+		// detail_transaction,
+		// transaction
+	)
 
 	// g.GenerateAllTable()
 

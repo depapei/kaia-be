@@ -31,16 +31,6 @@ func newProductslice(db *gorm.DB, opts ...gen.DOOption) productslice {
 	_productslice.ID = field.NewString(tableName, "id")
 	_productslice.ProductID = field.NewString(tableName, "product_id")
 	_productslice.Slice = field.NewString(tableName, "slice")
-	_productslice.Product = productsliceHasOneProduct{
-		db: db.Session(&gorm.Session{}),
-
-		RelationField: field.NewRelation("Product", "model.Product"),
-		Admin: struct {
-			field.RelationField
-		}{
-			RelationField: field.NewRelation("Product.Admin", "model.Admin"),
-		},
-	}
 
 	_productslice.fillFieldMap()
 
@@ -54,7 +44,6 @@ type productslice struct {
 	ID        field.String
 	ProductID field.String
 	Slice     field.String
-	Product   productsliceHasOneProduct
 
 	fieldMap map[string]field.Expr
 }
@@ -90,109 +79,20 @@ func (p *productslice) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (p *productslice) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 4)
+	p.fieldMap = make(map[string]field.Expr, 3)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["product_id"] = p.ProductID
 	p.fieldMap["slice"] = p.Slice
-
 }
 
 func (p productslice) clone(db *gorm.DB) productslice {
 	p.productsliceDo.ReplaceConnPool(db.Statement.ConnPool)
-	p.Product.db = db.Session(&gorm.Session{Initialized: true})
-	p.Product.db.Statement.ConnPool = db.Statement.ConnPool
 	return p
 }
 
 func (p productslice) replaceDB(db *gorm.DB) productslice {
 	p.productsliceDo.ReplaceDB(db)
-	p.Product.db = db.Session(&gorm.Session{})
 	return p
-}
-
-type productsliceHasOneProduct struct {
-	db *gorm.DB
-
-	field.RelationField
-
-	Admin struct {
-		field.RelationField
-	}
-}
-
-func (a productsliceHasOneProduct) Where(conds ...field.Expr) *productsliceHasOneProduct {
-	if len(conds) == 0 {
-		return &a
-	}
-
-	exprs := make([]clause.Expression, 0, len(conds))
-	for _, cond := range conds {
-		exprs = append(exprs, cond.BeCond().(clause.Expression))
-	}
-	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
-	return &a
-}
-
-func (a productsliceHasOneProduct) WithContext(ctx context.Context) *productsliceHasOneProduct {
-	a.db = a.db.WithContext(ctx)
-	return &a
-}
-
-func (a productsliceHasOneProduct) Session(session *gorm.Session) *productsliceHasOneProduct {
-	a.db = a.db.Session(session)
-	return &a
-}
-
-func (a productsliceHasOneProduct) Model(m *model.Productslice) *productsliceHasOneProductTx {
-	return &productsliceHasOneProductTx{a.db.Model(m).Association(a.Name())}
-}
-
-func (a productsliceHasOneProduct) Unscoped() *productsliceHasOneProduct {
-	a.db = a.db.Unscoped()
-	return &a
-}
-
-type productsliceHasOneProductTx struct{ tx *gorm.Association }
-
-func (a productsliceHasOneProductTx) Find() (result *model.Product, err error) {
-	return result, a.tx.Find(&result)
-}
-
-func (a productsliceHasOneProductTx) Append(values ...*model.Product) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Append(targetValues...)
-}
-
-func (a productsliceHasOneProductTx) Replace(values ...*model.Product) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Replace(targetValues...)
-}
-
-func (a productsliceHasOneProductTx) Delete(values ...*model.Product) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Delete(targetValues...)
-}
-
-func (a productsliceHasOneProductTx) Clear() error {
-	return a.tx.Clear()
-}
-
-func (a productsliceHasOneProductTx) Count() int64 {
-	return a.tx.Count()
-}
-
-func (a productsliceHasOneProductTx) Unscoped() *productsliceHasOneProductTx {
-	a.tx = a.tx.Unscoped()
-	return &a
 }
 
 type productsliceDo struct{ gen.DO }

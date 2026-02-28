@@ -36,19 +36,6 @@ func newDetailTransaction(db *gorm.DB, opts ...gen.DOOption) detailTransaction {
 		db: db.Session(&gorm.Session{}),
 
 		RelationField: field.NewRelation("ProductSlice", "model.Productslice"),
-		Product: struct {
-			field.RelationField
-			Admin struct {
-				field.RelationField
-			}
-		}{
-			RelationField: field.NewRelation("ProductSlice.Product", "model.Product"),
-			Admin: struct {
-				field.RelationField
-			}{
-				RelationField: field.NewRelation("ProductSlice.Product.Admin", "model.Admin"),
-			},
-		},
 	}
 
 	_detailTransaction.fillFieldMap()
@@ -126,13 +113,6 @@ type detailTransactionHasOneProductSlice struct {
 	db *gorm.DB
 
 	field.RelationField
-
-	Product struct {
-		field.RelationField
-		Admin struct {
-			field.RelationField
-		}
-	}
 }
 
 func (a detailTransactionHasOneProductSlice) Where(conds ...field.Expr) *detailTransactionHasOneProductSlice {

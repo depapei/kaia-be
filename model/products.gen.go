@@ -8,16 +8,17 @@ const TableNameProduct = "products"
 
 // Product mapped from table <products>
 type Product struct {
-	ID           string `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
-	Name         string `gorm:"column:name;not null" json:"name"`
-	Price        int32  `gorm:"column:price;not null" json:"price"`
-	Category     string `gorm:"column:category;not null" json:"category"`
-	Description  string `gorm:"column:description" json:"description"`
-	Longdesc     string `gorm:"column:longdesc" json:"longdesc"`
-	Image        string `gorm:"column:image" json:"image"`
-	Sliceoptions string `gorm:"column:sliceoptions" json:"sliceoptions"`
-	CreatedBy    string `gorm:"column:created_by;not null" json:"created_by"`
-	Admin        Admin  `gorm:"foreignKey:created_by" json:"admin"`
+	ID            string         `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
+	Name          string         `gorm:"column:name;not null" json:"name"`
+	Price         int32          `gorm:"column:price;not null" json:"price"`
+	Category      string         `gorm:"column:category;not null" json:"category"`
+	Description   string         `gorm:"column:description" json:"description"`
+	Longdesc      string         `gorm:"column:longdesc" json:"longdesc"`
+	Image         string         `gorm:"column:image" json:"image"`
+	Sliceoptions  string         `gorm:"column:sliceoptions" json:"sliceoptions"`
+	CreatedBy     string         `gorm:"column:created_by;not null" json:"created_by"`
+	Admin         Admin          `gorm:"foreignKey:created_by" json:"admin"`
+	ProductSlices []Productslice `gorm:"foreignKey:product_id" json:"product_slices"`
 }
 
 // TableName Product's table name

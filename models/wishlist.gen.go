@@ -40,6 +40,11 @@ func newWishlist(db *gorm.DB, opts ...gen.DOOption) wishlist {
 		}{
 			RelationField: field.NewRelation("Product.Admin", "model.Admin"),
 		},
+		ProductSlices: struct {
+			field.RelationField
+		}{
+			RelationField: field.NewRelation("Product.ProductSlices", "model.Productslice"),
+		},
 	}
 
 	_wishlist.User = wishlistHasOneUser{
@@ -127,6 +132,9 @@ type wishlistHasOneProduct struct {
 	field.RelationField
 
 	Admin struct {
+		field.RelationField
+	}
+	ProductSlices struct {
 		field.RelationField
 	}
 }

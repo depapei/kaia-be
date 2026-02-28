@@ -27,7 +27,7 @@ func main() {
 	router.Use(Cors())
 
 	db.Connect()
-	// db.GenerateModels()
+	db.GenerateModels()
 
 	// authentication
 	auth := router.Group("/auth")

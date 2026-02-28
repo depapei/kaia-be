@@ -16,64 +16,39 @@ import (
 )
 
 var (
-	Q                 = new(Query)
-	Admin             *admin
-	DetailTransaction *detailTransaction
-	HeaderTransaction *headerTransaction
-	Product           *product
-	Productslice      *productslice
-	User              *user
-	Wishlist          *wishlist
+	Q     = new(Query)
+	Admin *admin
+	User  *user
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	Admin = &Q.Admin
-	DetailTransaction = &Q.DetailTransaction
-	HeaderTransaction = &Q.HeaderTransaction
-	Product = &Q.Product
-	Productslice = &Q.Productslice
 	User = &Q.User
-	Wishlist = &Q.Wishlist
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:                db,
-		Admin:             newAdmin(db, opts...),
-		DetailTransaction: newDetailTransaction(db, opts...),
-		HeaderTransaction: newHeaderTransaction(db, opts...),
-		Product:           newProduct(db, opts...),
-		Productslice:      newProductslice(db, opts...),
-		User:              newUser(db, opts...),
-		Wishlist:          newWishlist(db, opts...),
+		db:    db,
+		Admin: newAdmin(db, opts...),
+		User:  newUser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Admin             admin
-	DetailTransaction detailTransaction
-	HeaderTransaction headerTransaction
-	Product           product
-	Productslice      productslice
-	User              user
-	Wishlist          wishlist
+	Admin admin
+	User  user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:                db,
-		Admin:             q.Admin.clone(db),
-		DetailTransaction: q.DetailTransaction.clone(db),
-		HeaderTransaction: q.HeaderTransaction.clone(db),
-		Product:           q.Product.clone(db),
-		Productslice:      q.Productslice.clone(db),
-		User:              q.User.clone(db),
-		Wishlist:          q.Wishlist.clone(db),
+		db:    db,
+		Admin: q.Admin.clone(db),
+		User:  q.User.clone(db),
 	}
 }
 
@@ -87,36 +62,21 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:                db,
-		Admin:             q.Admin.replaceDB(db),
-		DetailTransaction: q.DetailTransaction.replaceDB(db),
-		HeaderTransaction: q.HeaderTransaction.replaceDB(db),
-		Product:           q.Product.replaceDB(db),
-		Productslice:      q.Productslice.replaceDB(db),
-		User:              q.User.replaceDB(db),
-		Wishlist:          q.Wishlist.replaceDB(db),
+		db:    db,
+		Admin: q.Admin.replaceDB(db),
+		User:  q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Admin             IAdminDo
-	DetailTransaction IDetailTransactionDo
-	HeaderTransaction IHeaderTransactionDo
-	Product           IProductDo
-	Productslice      IProductsliceDo
-	User              IUserDo
-	Wishlist          IWishlistDo
+	Admin IAdminDo
+	User  IUserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Admin:             q.Admin.WithContext(ctx),
-		DetailTransaction: q.DetailTransaction.WithContext(ctx),
-		HeaderTransaction: q.HeaderTransaction.WithContext(ctx),
-		Product:           q.Product.WithContext(ctx),
-		Productslice:      q.Productslice.WithContext(ctx),
-		User:              q.User.WithContext(ctx),
-		Wishlist:          q.Wishlist.WithContext(ctx),
+		Admin: q.Admin.WithContext(ctx),
+		User:  q.User.WithContext(ctx),
 	}
 }
 
