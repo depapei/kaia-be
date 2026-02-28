@@ -63,7 +63,6 @@ func Login(c *gin.Context) {
 	claims := &JWTClaim{
 		UserID:    user.ID,
 		UserEmail: user.Email,
-		Sub:       (user.Email) + "-" + (user.ID),
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expTime),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -75,7 +74,6 @@ func Login(c *gin.Context) {
 	tokenString, err := token.SignedString(jwtSecret)
 	if err != nil {
 		fmt.Print(err.Error())
-		fmt.Print(jwtSecret)
 		c.JSON(http.StatusUnauthorized, res.Fail{
 			Message: "Failed to generate token",
 		})
