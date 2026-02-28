@@ -16,39 +16,49 @@ import (
 )
 
 var (
-	Q     = new(Query)
-	Admin *admin
-	User  *user
+	Q            = new(Query)
+	Admin        *admin
+	Product      *product
+	Productslice *productslice
+	User         *user
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	Admin = &Q.Admin
+	Product = &Q.Product
+	Productslice = &Q.Productslice
 	User = &Q.User
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:    db,
-		Admin: newAdmin(db, opts...),
-		User:  newUser(db, opts...),
+		db:           db,
+		Admin:        newAdmin(db, opts...),
+		Product:      newProduct(db, opts...),
+		Productslice: newProductslice(db, opts...),
+		User:         newUser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Admin admin
-	User  user
+	Admin        admin
+	Product      product
+	Productslice productslice
+	User         user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:    db,
-		Admin: q.Admin.clone(db),
-		User:  q.User.clone(db),
+		db:           db,
+		Admin:        q.Admin.clone(db),
+		Product:      q.Product.clone(db),
+		Productslice: q.Productslice.clone(db),
+		User:         q.User.clone(db),
 	}
 }
 
@@ -62,21 +72,27 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:    db,
-		Admin: q.Admin.replaceDB(db),
-		User:  q.User.replaceDB(db),
+		db:           db,
+		Admin:        q.Admin.replaceDB(db),
+		Product:      q.Product.replaceDB(db),
+		Productslice: q.Productslice.replaceDB(db),
+		User:         q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Admin IAdminDo
-	User  IUserDo
+	Admin        IAdminDo
+	Product      IProductDo
+	Productslice IProductsliceDo
+	User         IUserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Admin: q.Admin.WithContext(ctx),
-		User:  q.User.WithContext(ctx),
+		Admin:        q.Admin.WithContext(ctx),
+		Product:      q.Product.WithContext(ctx),
+		Productslice: q.Productslice.WithContext(ctx),
+		User:         q.User.WithContext(ctx),
 	}
 }
 

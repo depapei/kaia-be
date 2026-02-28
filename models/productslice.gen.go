@@ -31,6 +31,7 @@ func newProductslice(db *gorm.DB, opts ...gen.DOOption) productslice {
 	_productslice.ID = field.NewString(tableName, "id")
 	_productslice.ProductID = field.NewString(tableName, "product_id")
 	_productslice.Slice = field.NewString(tableName, "slice")
+	_productslice.Price = field.NewFloat64(tableName, "price")
 
 	_productslice.fillFieldMap()
 
@@ -44,6 +45,7 @@ type productslice struct {
 	ID        field.String
 	ProductID field.String
 	Slice     field.String
+	Price     field.Float64
 
 	fieldMap map[string]field.Expr
 }
@@ -63,6 +65,7 @@ func (p *productslice) updateTableName(table string) *productslice {
 	p.ID = field.NewString(table, "id")
 	p.ProductID = field.NewString(table, "product_id")
 	p.Slice = field.NewString(table, "slice")
+	p.Price = field.NewFloat64(table, "price")
 
 	p.fillFieldMap()
 
@@ -79,10 +82,11 @@ func (p *productslice) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (p *productslice) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 3)
+	p.fieldMap = make(map[string]field.Expr, 4)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["product_id"] = p.ProductID
 	p.fieldMap["slice"] = p.Slice
+	p.fieldMap["price"] = p.Price
 }
 
 func (p productslice) clone(db *gorm.DB) productslice {
