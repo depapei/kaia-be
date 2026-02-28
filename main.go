@@ -62,6 +62,25 @@ func main() {
 		}
 	}
 
+	ar := router.Group("/admin")
+	ar_auth := ar.Group("/auth")
+	{
+		ar_auth.POST("/login", authentication.LoginAdmin)
+	}
+	ar.Use(middleware.AdminMiddleware())
+	{
+		adm_prod := ar.Group("/products")
+		{
+			adm_prod.GET("/", product.Index)
+			adm_prod.POST("/", product.Create)
+		}
+		adm_trx := ar.Group("/transactions")
+		{
+			adm_trx.GET("/", product.Index)
+			adm_trx.POST("/", product.Create)
+		}
+	}
+
 	router.Run()
 }
 
