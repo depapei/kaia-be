@@ -19,12 +19,6 @@ type ValidateInput struct {
 	Password string `json:"password" binding:"required"`
 }
 
-type DataResponse struct {
-	Email string `json:"email"`
-	ID    string `json:"user_id"`
-	Token string `json:"token"`
-}
-
 type JWTClaim struct {
 	UserID    string `json:"user_id"`
 	UserEmail string `json:"user_email"`
@@ -80,13 +74,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, res.Success{
-		Success: true,
-		Data: DataResponse{
-			ID:    user.ID,
-			Email: user.Email,
-			Token: tokenString,
-		},
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"token":   tokenString,
 	})
 
 }
