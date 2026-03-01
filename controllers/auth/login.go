@@ -110,7 +110,7 @@ func LoginAdmin(c *gin.Context) {
 		return
 	}
 
-	expTime := time.Now().Add(365 * time.Hour)
+	expTime := time.Now().Add(24 * time.Hour)
 	claims := &JWTClaim{
 		UserID: user.ID,
 		Sub:    user.Username,
