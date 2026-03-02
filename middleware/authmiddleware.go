@@ -5,6 +5,7 @@ import (
 	"KAIA-BE/utils"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -67,7 +68,7 @@ func AdminMiddleware() gin.HandlerFunc {
 		}
 
 		parts := strings.Split(auth_header, " ")
-		if len(parts) != 2 || parts[0] != "master_admin_kaia" {
+		if len(parts) != 2 || parts[0] != os.Getenv("ADMIN_BEARER_TOKEN") {
 			fmt.Print(parts)
 			fmt.Print(parts[0])
 			c.AbortWithStatusJSON(http.StatusBadRequest, res.Fail{
@@ -86,7 +87,7 @@ func AdminMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("user_id", claims.UserID)
-		c.Set("user_email", claims.UserEmail)
+		c.Set("username", claims.Username)
 
 		c.Next()
 	}
