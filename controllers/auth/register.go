@@ -53,7 +53,7 @@ func Register(c *gin.Context) {
 	if err := DataAccess.DB.Create(&data).Error; err != nil {
 		if err.Error() == "duplicated key not allowed" {
 			errMessage := fmt.Sprintf(`Email %s sudah tersedia!`, input.Email)
-			c.JSON(http.StatusInternalServerError, res.Fail{
+			c.JSON(http.StatusConflict, res.Fail{
 				Message: errMessage,
 			})
 			return
