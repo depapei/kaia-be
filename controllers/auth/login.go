@@ -22,8 +22,15 @@ type ValidateInput struct {
 type JWTClaim struct {
 	UserID    string `json:"user_id"`
 	UserEmail string `json:"user_email"`
+	Username  string `json:"user_name,omitempty"`
 	Sub       string `json:"sub"`
 	jwt.RegisteredClaims
+}
+
+type UserData struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
 }
 
 var jwtSecret = []byte(os.Getenv("SECRET_KEY"))
@@ -76,7 +83,12 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"token":   tokenString,
+		"userData": UserData{
+			ID:    user.ID,
+			Email: user.Email,
+			Name:  user.Name,
+		},
+		"token": tokenString,
 	})
 }
 
