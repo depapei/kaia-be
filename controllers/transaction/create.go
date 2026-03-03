@@ -112,6 +112,7 @@ func Create(c *gin.Context) {
 
 	// final, set transaction id
 	input.ID = trx_h.ID
+	input.CreatedAt = trx_h.CreatedAt.Format("02 Jan 2006")
 
 	c.JSON(http.StatusCreated, res.Success{
 		Success: true,
