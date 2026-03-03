@@ -53,8 +53,7 @@ func main() {
 
 		trxP := protected.Group("/transactions")
 		{
-			trxP.GET("/", transaction.Index)
-			trxP.GET("/:userId/", transaction.GetTransaction)
+			trxP.GET("/:user_id", transaction.GetTransaction)
 		}
 
 		wl := protected.Group("/wishlists")
