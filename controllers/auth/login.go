@@ -31,6 +31,7 @@ type UserData struct {
 	ID    string `json:"id"`
 	Email string `json:"email"`
 	Name  string `json:"name"`
+	Token string `json:"token"`
 }
 
 var jwtSecret = []byte(os.Getenv("SECRET_KEY"))
@@ -87,8 +88,8 @@ func Login(c *gin.Context) {
 			ID:    user.ID,
 			Email: user.Email,
 			Name:  user.Name,
+			Token: tokenString,
 		},
-		"token": tokenString,
 	})
 }
 
