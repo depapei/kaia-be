@@ -46,11 +46,10 @@ func main() {
 		trx.POST("/", transaction.Create)
 	}
 
-	// need login
+	// public but need login
 	protected := router.Group("/api")
 	protected.Use(middleware.AuthMiddleware())
 	{
-
 		trxP := protected.Group("/transactions")
 		{
 			trxP.GET("/:user_id", transaction.GetTransaction)
@@ -58,7 +57,9 @@ func main() {
 
 		wl := protected.Group("/wishlists")
 		{
-			wl.GET("/", wishlist.Index)
+			wl.GET("/:user_id", wishlist.Index)
+			wl.POST("/", wishlist.Create)
+			wl.DELETE("/:user_id/:product_id", wishlist.Delete)
 		}
 	}
 
