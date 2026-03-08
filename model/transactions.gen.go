@@ -17,6 +17,7 @@ type HeaderTransaction struct {
 	City              string              `gorm:"column:city" json:"city"`
 	Postalcode        string              `gorm:"column:postalcode" json:"postalcode"`
 	Totalprice        int32               `gorm:"column:totalprice;not null" json:"totalprice"`
+	Status            string              `gorm:"column:status" json:"status"`
 	CreatedAt         time.Time           `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
 	CreatedBy         *uuid.UUID          `gorm:"column:created_by" json:"created_by"`
 	DetailTransaction []DetailTransaction `gorm:"foreignKey:transaction_id" json:"detail_transaction"`
