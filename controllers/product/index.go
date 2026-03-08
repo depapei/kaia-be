@@ -32,6 +32,7 @@ func Index(c *gin.Context) {
 
 	result := DataAccess.DB.Limit(50).
 		Preload("ProductSlices").
+		Where(`"is_deleted" = ?`, false).
 		Find(&products)
 
 	if result.Error != nil {
