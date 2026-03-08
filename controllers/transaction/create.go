@@ -28,6 +28,7 @@ type TransactionInput struct {
 	City          string       `json:"city" binding:"required"`
 	CustomerEmail string       `json:"customerEmail" binding:"required"`
 	CustomerName  string       `json:"customerName" binding:"required"`
+	Status        string       `json:"status,omitempty"`
 	TotalPrice    float64      `json:"totalPrice" binding:"required"`
 	Items         []ItemsInput `json:"items" binding:"required"`
 }
@@ -52,6 +53,7 @@ func Create(c *gin.Context) {
 		City:          input.City,
 		Postalcode:    input.PostalCode,
 		Totalprice:    int32(totalPrice),
+		Status:        input.Status,
 	}
 
 	if len(input.UserID) > 0 && input.UserID != "null" {
