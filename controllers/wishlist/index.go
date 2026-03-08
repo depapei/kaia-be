@@ -12,6 +12,7 @@ import (
 type SliceOpt struct {
 	Slices string  `json:"slices"`
 	Price  float64 `json:"price"`
+	ID     string  `json:"id"`
 }
 
 type WishlistResponse struct {
@@ -53,6 +54,7 @@ func Index(c *gin.Context) {
 			sliceOpt = append(sliceOpt, SliceOpt{
 				Slices: productSlice.Slice,
 				Price:  productSlice.Price,
+				ID:     productSlice.ID,
 			})
 		}
 
