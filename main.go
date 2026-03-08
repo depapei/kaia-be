@@ -74,6 +74,8 @@ func main() {
 		{
 			adm_prod.GET("/", product.Index)
 			adm_prod.POST("/", product.Create)
+			adm_prod.PUT("/:product_id", product.Update)
+			adm_prod.DELETE("/:product_id", product.Delete)
 		}
 		adm_trx := ar.Group("/transactions")
 		{
