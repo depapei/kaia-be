@@ -17,6 +17,7 @@ func GetTransaction(c *gin.Context) {
 		Model(&model.HeaderTransaction{}).
 		Preload("DetailTransaction.ProductSlice.Product").
 		Where("created_by = ?", userId).
+		Order("created_at desc").
 		Find(&data)
 
 	if err := da.Error; err != nil {
