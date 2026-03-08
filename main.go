@@ -79,8 +79,8 @@ func main() {
 		}
 		adm_trx := ar.Group("/transactions")
 		{
-			adm_trx.GET("/", product.Index)
-			adm_trx.POST("/", product.Create)
+			adm_trx.GET("/", transaction.Index)
+			adm_trx.POST("/", transaction.Create)
 		}
 	}
 
