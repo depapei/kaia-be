@@ -48,6 +48,7 @@ func GetTransaction(c *gin.Context) {
 			CustomerName:  transaction.Customername,
 			TotalPrice:    float64(transaction.Totalprice),
 			Items:         trx_items,
+			Status:        transaction.Status,
 			CreatedAt:     transaction.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
