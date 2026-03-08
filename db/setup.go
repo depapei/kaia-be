@@ -28,8 +28,8 @@ func Connect() {
 		log.Fatal("Failed to get database instance: ", err)
 	}
 
-	pgDb.SetMaxOpenConns(5)
-	pgDb.SetMaxIdleConns(2)
+	pgDb.SetMaxOpenConns(25)
+	pgDb.SetMaxIdleConns(10)
 	pgDb.SetConnMaxLifetime(time.Hour)
 
 	DB = db.Debug()
