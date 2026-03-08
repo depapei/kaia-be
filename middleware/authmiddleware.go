@@ -62,14 +62,13 @@ func AdminMiddleware() gin.HandlerFunc {
 		auth_header := c.GetHeader("Authorization")
 		if auth_header == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, res.Fail{
-				Message: "Please login first!",
+				Message: "Please login as admin first!",
 			})
 			return
 		}
 
 		parts := strings.Split(auth_header, " ")
 		if len(parts) != 2 || parts[0] != os.Getenv("ADMIN_BEARER_TOKEN") {
-			fmt.Print(parts)
 			fmt.Print(parts[0])
 			c.AbortWithStatusJSON(http.StatusBadRequest, res.Fail{
 				Message: "Invalid token format",
