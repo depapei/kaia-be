@@ -37,7 +37,11 @@ func Index(c *gin.Context) {
 		return
 	}
 
-	result := DataAccess.DB.Preload("Product.ProductSlices").Where("user_id = ?", user_id).Find(&wishlists).Limit(50)
+	result := DataAccess.DB.
+		Where("user_id = ?", user_id).
+		Limit(50).
+		Preload("Product", "is_deleted = ?", false).
+		Preload("Product.ProductSlices").Find(&wishlists)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, res.Fail{
@@ -48,6 +52,10 @@ func Index(c *gin.Context) {
 
 	var response []WishlistResponse
 	for _, wishlist := range wishlists {
+
+		if wishlist.Product.Name == "" {
+			continue
+		}
 
 		var sliceOpt []SliceOpt
 		for _, productSlice := range wishlist.Product.ProductSlices {
