@@ -52,7 +52,15 @@ func Update(c *gin.Context) {
 	}
 
 	var slices []model.Productslice
-	if err := DA.Where(`"product_id" = ?`, id).Delete(&slices).Error; err != nil {
+	if err := DA.Model(&slices).Where(`"product_id" = ?`, id).Find(&slices).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, res.Fail{
+			Message: "Gagal menemukan product slices",
+		})
+		DA.Rollback()
+		return
+	}
+
+	if err := DA.Model(&slices).Where(`"product_id" = ?`, id).Update("is_deleted", true).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, res.Fail{
 			Message: "Gagal menghapus product slices",
 		})
@@ -60,15 +68,62 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	var sliceIDs []string
+	for _, s := range slices {
+		sliceIDs = append(sliceIDs, s.ID)
+	}
+
+	var usedSliceIDs []string
+	if err := DA.
+		Model(&model.DetailTransaction{}).
+		Where(`productslice_id IN ?`, sliceIDs).
+		Distinct().
+		Pluck("productslice_id", &usedSliceIDs).
+		Error; err != nil {
+
+		c.JSON(http.StatusInternalServerError, res.Fail{
+			Message: "Gagal mengambil slice yang dipakai transaksi",
+		})
+		DA.Rollback()
+		return
+	}
+
+	usedMap := map[string]bool{}
+	for _, id := range usedSliceIDs {
+		usedMap[id] = true
+	}
+
+	var deleteIDs []string
+	for _, s := range slices {
+		if !usedMap[s.ID] {
+			deleteIDs = append(deleteIDs, s.ID)
+		}
+	}
+
+	if len(deleteIDs) > 0 {
+		if err := DA.
+			Where(`id IN ?`, deleteIDs).
+			Delete(&model.Productslice{}).
+			Error; err != nil {
+
+			c.JSON(http.StatusInternalServerError, res.Fail{
+				Message: "Gagal menghapus slice",
+			})
+			DA.Rollback()
+			return
+		}
+	}
+
+	var newSlices []model.Productslice
 	for _, slice := range input.SliceOptions {
-		slices = append(slices, model.Productslice{
+		newSlices = append(newSlices, model.Productslice{
 			ProductID: product.ID,
 			Slice:     slice.Slices,
 			Price:     slice.Price,
 		})
 	}
 
-	if err := DA.Create(&slices).Error; err != nil {
+	if err := DA.Create(&newSlices).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, res.Fail{
 			Message: "Gagal menyimpan potongan produk",
 		})

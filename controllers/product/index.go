@@ -31,7 +31,7 @@ func Index(c *gin.Context) {
 	var products []model.Product
 
 	result := DataAccess.DB.Limit(50).
-		Preload("ProductSlices").
+		Preload("ProductSlices", "is_deleted", false).
 		Where(`"is_deleted" = ?`, false).
 		Find(&products)
 

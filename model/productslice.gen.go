@@ -8,6 +8,7 @@ type Productslice struct {
 	ProductID string  `gorm:"column:product_id;not null" json:"product_id"`
 	Slice     string  `gorm:"column:slice;not null" json:"slice"`
 	Price     float64 `gorm:"column:price;not null" json:"price"`
+	IsDeleted bool    `gorm:"column:is_deleted" json:"is_deleted"`
 	Product   Product `gorm:"foreignKey:ProductID" json:"product"`
 }
 
